@@ -13,7 +13,7 @@ int main() {
   if ( SDL_Init(SDL_INIT_EVERYTHING) ) {
     return 1;
   }
-  exit_status = window_create( window );
+  exit_status = window_create(window);
   if (exit_status) { 
     printf("Error: window_create");
     return 1;
@@ -23,11 +23,18 @@ int main() {
     printf("Error: surfase_create");
     return 1;
   }
+  exit_status = init_rays(SCREEN_WIDTH);
+  if (exit_status) { 
+    printf("Error: init_rays");
+    return 1;
+  }
+  init_mindist(SCREEN_WIDTH);
   exit_status = main_loop();
   if (exit_status) { 
     printf("Error: main_loop");
     return 1;
   }
+
   return 0;
 }
 
@@ -37,7 +44,8 @@ int main_loop(){
       if ( event.type == SDL_QUIT )
         return 0;
     }
-    //SDL_FillRect( surface, NULL, SDL_MapRGB(surface->format, 255, 255, 255) );
+    renddis( player.angle, player.FOV, SCREEN_WIDTH );
+    min_distance(SCREEN_WIDTH);
     SDL_UpdateWindowSurface(window);
   }
 }

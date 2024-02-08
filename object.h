@@ -9,7 +9,6 @@ typedef struct {
 } POINT;
 
 typedef struct {
-  float *heights;
   float *distances;
   POINT *points;
 } RAY;
@@ -17,7 +16,6 @@ typedef struct {
 typedef struct {
   POINT A;
   POINT B;
-  float height;
   TEXTURE *texture;
 } SEGMENT;
 

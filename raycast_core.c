@@ -5,26 +5,37 @@ static PLAYER player;
 static WORLD world;
 
 RAY *rays;
+float *mindist;
+
+int init_mindist( int NOR ) {
+  mindist = calloc( NOR, sizeof(float) );
+  if ( mindist == NULL ) {
+    return 1;
+  }
+  return 0
+}
 
 int init_rays( int NOR ) {
   rays = calloc( NOR, sizeof(RAY) );
-  if ( distances == NULL ) {
+  if ( rays == NULL ) {
     return 1;
   }
   for (int i = 0; i < NOR; i++) {
-    rays[i].heights   = calloc( world.segment_c, sizeof(float) );
     rays[i].distances = calloc( world.segment_c, sizeof(float) );
     rays[i].points    = calloc( world.segment_c, sizeof(POINT) );
   }
   return 0;
 }
 
+int destroy_mindist() {
+  free(mindist);
+  mindist = NULL;
+  return 0;
+}
 int destroy_rays( int NOR ) {
   for (int i = 0; i < NOR; i++) {
-    free(rays[i].heights);
     free(rays[i].distances);
     free(rays[i].points);
-    rays[i].heights = NULL;
     rays[i].distances = NULL;
     rays[i].points - NULL;
   }
@@ -47,10 +58,9 @@ int renddis( float POV, int FOV, int NOR ) {
 int ray( float ang, int ray_num ) {
   const SEGMENT lineB = { { player.pos[0], player.pos[1] },
                         { (cos(ang) * 10 + player.pos[0]), (sin(ang) * 10 + player.pos[1]) },
-                        0.0f, NULL };
+                        NULL };
   for (int i = 0; i < world.segment_c; i++) {
     const SEGMENT lineA = world.segments[i];
-    rays[ray_num].heights[i] = lineA.height;
     float n = ( lineA.A.x - lineA.B.x ) * ( lineB.A.y - lineB.B.y )
             - ( lineA.A.y - lineA.B.y ) * ( lineB.A.x - lineB.B.x );
     if ( n == 0.0f ) {
@@ -73,6 +83,19 @@ int ray( float ang, int ray_num ) {
     float d1 = x - player.pos[0];
     float d2 = y - player.pos[1];
     rays[ray_num].distances[i] = sqrt( d1 * d1 + d2 * d2 );
+  }
+  return 0;
+}
+
+int min_distance( int NOR ) {
+  for (int i = 0; i < NOR; i++) {
+    mindist[i] = rays[i].distance[0];
+    for (int j = 1; j < world.segment_c; j++) {
+      if ( !isnan(rays[i].distance[j]) && !isnan(rays[i].distance[j - 1])
+           && (rays[i].distance[j] < rays[i].distance[j - 1]) ) {
+        mindist[i] = rays[i].distance[j];
+      }
+    }
   }
   return 0;
 }
