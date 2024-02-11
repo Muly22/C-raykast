@@ -64,7 +64,7 @@ int ray( float ang, int ray_num ) {
     float n = ( lineA.A.x - lineA.B.x ) * ( lineB.A.y - lineB.B.y )
             - ( lineA.A.y - lineA.B.y ) * ( lineB.A.x - lineB.B.x );
     if ( n == 0.0f ) {
-      rays[ray_num].distances[i] = NUN;
+      rays[ray_num].distances[i] = NAN;
       rays[ray_num].points[i] = {};
       continue;
     }
@@ -76,7 +76,7 @@ int ray( float ang, int ray_num ) {
     rays[ray_num].points[i] = { x, y };
     if ( !((((x >= lineA.A.x) && (x <= lineA.B.x)) || ((x <= lineA.A.x) && (x >= lineA.B.x)))
         && (((y >= lineA.A.y) && (y <= lineA.B.y)) || ((y <= lineA.A.y) && (y >= lineA.B.y)))) ) {
-      rays[ray_num].distances[i] = NUN;
+      rays[ray_num].distances[i] = NAN;
       rays[ray_num].points[i] = {};
       continue;
     }
