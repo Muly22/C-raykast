@@ -1,5 +1,5 @@
 #include <math.h>
-#include "rayacst_core.h"
+#include "raycast_core.h"
 
 static PLAYER player;
 static WORLD world;
@@ -89,11 +89,11 @@ int ray( float ang, int ray_num ) {
 
 int min_distance( int NOR ) {
   for (int i = 0; i < NOR; i++) {
-    mindist[i] = rays[i].distance[0];
+    mindist[i] = rays[i].distances[0];
     for (int j = 1; j < world.segment_c; j++) {
-      if ( !isnan(rays[i].distance[j]) && !isnan(rays[i].distance[j - 1])
-           && (rays[i].distance[j] < rays[i].distance[j - 1]) ) {
-        mindist[i] = rays[i].distance[j];
+      if ( !isnan(rays[i].distance[j]) && !isnan(rays[i].distances[j - 1])
+           && (rays[i].distance[j] < rays[i].distances[j - 1]) ) {
+        mindist[i] = rays[i].distances[j];
       }
     }
   }

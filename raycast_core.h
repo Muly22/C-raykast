@@ -1,8 +1,8 @@
 #ifndef _RAYCAST_CORE_H_
 #define _RAYCAST_CORE_H_
 
-#include <player.h>
-#include <world.h>
+#include "player.h"
+#include "world.h"
 
 extern RAY *rays;
 extern float *mindist;
