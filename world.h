@@ -13,7 +13,7 @@ typedef struct {
 
 typedef struct {
   SEGMENT *segments;
-  int segnent_c;
+  int segment_c;
   PLAYER *players;
   int player_c;
   OBJECT objects;

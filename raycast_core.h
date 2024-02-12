@@ -7,8 +7,8 @@
 extern RAY *rays;
 extern float *mindist;
 
-extern static PLAYER player;
-extern static WORLD world;
+static PLAYER player;
+static WORLD world;
 
 int init_rays   ( int NOR );
 int destroy_rays( int NOR );

@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdlib.h>
 #include "raycast_core.h"
 
 static PLAYER player;
@@ -12,7 +13,7 @@ int init_mindist( int NOR ) {
   if ( mindist == NULL ) {
     return 1;
   }
-  return 0
+  return 0;
 }
 
 int init_rays( int NOR ) {
@@ -32,19 +33,21 @@ int destroy_mindist() {
   mindist = NULL;
   return 0;
 }
+
 int destroy_rays( int NOR ) {
   for (int i = 0; i < NOR; i++) {
     free(rays[i].distances);
     free(rays[i].points);
     rays[i].distances = NULL;
-    rays[i].points - NULL;
+    rays[i].points = NULL;
   }
   free(rays);
   rays = NULL;
+  return 0;
 }
 
 int renddis( float POV, int FOV, int NOR ) {
-  static float fovwid = POV / NOR;
+  float fovwid = POV / NOR;
   float angle = POV + (FOV >> 1);
   for (int i = 0; i < NOR; i++) {
     if ( ray( angle, i ) ) {
@@ -65,7 +68,8 @@ int ray( float ang, int ray_num ) {
             - ( lineA.A.y - lineA.B.y ) * ( lineB.A.x - lineB.B.x );
     if ( n == 0.0f ) {
       rays[ray_num].distances[i] = NAN;
-      rays[ray_num].points[i] = {};
+      rays[ray_num].points[i].x  = NAN;
+      rays[ray_num].points[i].y  = NAN;
       continue;
     }
     n = 1 / n;
@@ -73,11 +77,13 @@ int ray( float ang, int ray_num ) {
     float l2 = lineB.A.x * lineB.B.y - lineB.A.y * lineB.B.x;
     float x = ( l1 * ( lineB.A.x - lineB.B.x ) - ( lineA.A.x - lineA.B.x ) * l2 ) * n;
     float y = ( l1 * ( lineB.A.y - lineB.B.y ) - ( lineA.A.y - lineA.B.y ) * l2 ) * n;
-    rays[ray_num].points[i] = { x, y };
+    rays[ray_num].points[i].x = x;
+    rays[ray_num].points[i].y = y;
     if ( !((((x >= lineA.A.x) && (x <= lineA.B.x)) || ((x <= lineA.A.x) && (x >= lineA.B.x)))
         && (((y >= lineA.A.y) && (y <= lineA.B.y)) || ((y <= lineA.A.y) && (y >= lineA.B.y)))) ) {
       rays[ray_num].distances[i] = NAN;
-      rays[ray_num].points[i] = {};
+      rays[ray_num].points[i].x  = NAN;
+      rays[ray_num].points[i].y  = NAN;
       continue;
     }
     float d1 = x - player.pos[0];
@@ -91,8 +97,8 @@ int min_distance( int NOR ) {
   for (int i = 0; i < NOR; i++) {
     mindist[i] = rays[i].distances[0];
     for (int j = 1; j < world.segment_c; j++) {
-      if ( !isnan(rays[i].distance[j]) && !isnan(rays[i].distances[j - 1])
-           && (rays[i].distance[j] < rays[i].distances[j - 1]) ) {
+      if ( !isnan(rays[i].distances[j]) && !isnan(rays[i].distances[j - 1])
+           && (rays[i].distances[j] < rays[i].distances[j - 1]) ) {
         mindist[i] = rays[i].distances[j];
       }
     }

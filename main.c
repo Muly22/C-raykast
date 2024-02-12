@@ -32,7 +32,7 @@ dest:
 
 int main_loop() {
   for (;;) {
-    if (IsKeyPressed(KEY_ESC)) {
+    if (IsKeyPressed(KEY_END)) {
       return 0;
     }
     BeginDrawing();
@@ -43,4 +43,4 @@ int main_loop() {
   }
 }
 
-int main_destroy() { CloseWindow(); }
+int main_destroy() { CloseWindow(); return 0; }
