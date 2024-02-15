@@ -1,4 +1,4 @@
 #include "raylib_window.h"
 
-int SCREEN_WIDTH=800;
-int SCREEN_HEIGHT=600;
+int SCREEN_WIDTH=1920;
+int SCREEN_HEIGHT=1080;
