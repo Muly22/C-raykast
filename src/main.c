@@ -4,8 +4,8 @@
 #include "rerror.h"
 #include <stdio.h>
 
-int main_loop(void);
-int main_destroy(void);
+STATUS main_loop(void);
+STATUS main_destroy(void);
 
 int main() {
   STATUS exit_status;
