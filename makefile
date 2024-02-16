@@ -1,5 +1,5 @@
 BUILD_NAME=raycast
-BUILD_STATUS?=DEBUG
+BUILD_STATUS:=DEBUG
 
 
 CC=gcc
@@ -16,16 +16,16 @@ SRC:= $(addprefix $(PREFIX_SRC), $(SRC))
 OBJ:= $(addprefix $(PREFIX_OBJ), $(OBJ))
 BUILD_NAME:= $(addprefix $(PREFIX_BIN), $(BUILD_NAME))
 
-CFLUGS+= -Werror -O$(OPT) -lm
+FLUGS+= -Werror -O$(OPT) -lm
 
-ifeq ( $(BUILD_STATUS), DEBUG )
-	CFLUGS+= -D __DEBUG
-
+ifeq ($(BUILD_STATUS),DEBUG)
+	CFLUGS+= -D DEBUG
+endif
 $(BUILD_NAME) : $(OBJ)
-	$(CC) $(OBJ) -o $(BUILD_NAME) $(CFLUGS)
+	$(CC) $(OBJ) -o $(BUILD_NAME) $(FLUGS)
 
 $(PREFIX_OBJ)%.o : $(PREFIX_SRC)%.c
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(CFLUGS)
 
 clean :
 	rm $(BUILD_NAME)  $(PREFIX_OBJ)*.o

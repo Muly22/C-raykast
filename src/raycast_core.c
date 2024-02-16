@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "raycast_core.h"
 #include "rerror.h"
 
@@ -13,6 +14,9 @@ STATUS init_mindist( int NOR ) {
   mindist = calloc( NOR, sizeof(float) );
   if ( mindist == NULL )
     goto error_init;
+  #ifdef DEBUG
+    puts("INFO: init_mindist\n");
+  #endif
   return SUCCESS;
   error_init:
   return ERROR_INIT;
@@ -26,6 +30,9 @@ STATUS init_rays( int NOR ) {
     rays[i].distances = calloc( world.segment_c, sizeof(float) );
     rays[i].points    = calloc( world.segment_c, sizeof(POINT) );
   }
+  #ifdef DEBUG
+    puts("INFO: init_rays");
+  #endif
   return SUCCESS;
   error_init:
   return ERROR_INIT;
@@ -34,6 +41,9 @@ STATUS init_rays( int NOR ) {
 STATUS destroy_mindist() {
   free(mindist);
   mindist = NULL;
+  #ifdef DEBUG
+    puts("INFO: destroy_mindist");
+  #endif
   return SUCCESS;
 }
 
@@ -46,6 +56,9 @@ STATUS destroy_rays( int NOR ) {
   }
   free(rays);
   rays = NULL;
+  #ifdef DEBUG
+    puts("INFO: destroy_rays");
+  #endif
   return SUCCESS;
 }
 
