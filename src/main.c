@@ -4,20 +4,22 @@
 #include "rerror.h"
 #include <stdio.h>
 
+#define CHECK if ( check_error(exit_status, NULL) ) {goto dest;}
+
 STATUS main_loop(void);
 STATUS main_destroy(void);
 
+STATUS exit_status;
+
 int main() {
-  STATUS exit_status;
   exit_status = init_rays( SCREEN_WIDTH );
-  if ( check_error(exit_status, NULL) )
-    goto dest;
+  CHECK 
   exit_status = init_mindist( SCREEN_WIDTH );
-  if ( check_error(exit_status, NULL) )
-    goto dest;
+  CHECK 
+  exit_status = create_window();
+  CHECK 
   exit_status = main_loop();
-  if ( check_error(exit_status, NULL) )
-    goto dest;
+  CHECK 
   dest:
   main_destroy();
   return 0;
@@ -25,9 +27,13 @@ int main() {
 
 STATUS main_loop() {
   for (;;) {
+    if ( next_event() ) break;
+    if ( check_error(window_clear(), NULL)) {goto error_main_loop;}
     renddis(player.angle, player.FOV, SCREEN_WIDTH);
     min_distance(SCREEN_WIDTH);
   }
   return SUCCESS;
+  error_main_loop:
+  return ERROR_MAIN_LOOP;
 }
-STATUS main_destroy() { return SUCCESS; }
+STATUS main_destroy() { close_window(); return SUCCESS; }

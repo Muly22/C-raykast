@@ -16,7 +16,7 @@ SRC:= $(addprefix $(PREFIX_SRC), $(SRC))
 OBJ:= $(addprefix $(PREFIX_OBJ), $(OBJ))
 BUILD_NAME:= $(addprefix $(PREFIX_BIN), $(BUILD_NAME))
 
-FLUGS+= -Werror -O$(OPT) -lm
+FLUGS+= -Werror -O$(OPT) -lm -lX11 
 
 ifeq ($(BUILD_STATUS),DEBUG)
 	CFLUGS+= -D DEBUG

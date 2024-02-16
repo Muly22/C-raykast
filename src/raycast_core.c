@@ -15,7 +15,7 @@ STATUS init_mindist( int NOR ) {
   if ( mindist == NULL )
     goto error_init;
   #ifdef DEBUG
-    puts("INFO: init_mindist\n");
+    puts("INFO: init_mindist");
   #endif
   return SUCCESS;
   error_init:
