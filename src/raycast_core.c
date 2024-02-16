@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "raycast_core.h"
+#include "rerror.h"
 
 static PLAYER player;
 static WORLD world;
@@ -8,33 +9,35 @@ static WORLD world;
 RAY *rays;
 float *mindist;
 
-int init_mindist( int NOR ) {
+STATUS init_mindist( int NOR ) {
   mindist = calloc( NOR, sizeof(float) );
-  if ( mindist == NULL ) {
-    return 1;
-  }
-  return 0;
+  if ( mindist == NULL )
+    goto error_init;
+  return SUCCESS;
+  error_init:
+  return ERROR_INIT;
 }
 
-int init_rays( int NOR ) {
+STATUS init_rays( int NOR ) {
   rays = calloc( NOR, sizeof(RAY) );
-  if ( rays == NULL ) {
-    return 1;
-  }
+  if ( rays == NULL )
+    goto error_init;
   for (int i = 0; i < NOR; i++) {
     rays[i].distances = calloc( world.segment_c, sizeof(float) );
     rays[i].points    = calloc( world.segment_c, sizeof(POINT) );
   }
-  return 0;
+  return SUCCESS;
+  error_init:
+  return ERROR_INIT;
 }
 
-int destroy_mindist() {
+STATUS destroy_mindist() {
   free(mindist);
   mindist = NULL;
-  return 0;
+  return SUCCESS;
 }
 
-int destroy_rays( int NOR ) {
+STATUS destroy_rays( int NOR ) {
   for (int i = 0; i < NOR; i++) {
     free(rays[i].distances);
     free(rays[i].points);
@@ -43,22 +46,23 @@ int destroy_rays( int NOR ) {
   }
   free(rays);
   rays = NULL;
-  return 0;
+  return SUCCESS;
 }
 
-int renddis( float POV, int FOV, int NOR ) {
+STATUS renddis( float POV, int FOV, int NOR ) {
   float fovwid = POV / NOR;
   float angle = POV + (FOV >> 1);
   for (int i = 0; i < NOR; i++) {
-    if ( ray( angle, i ) ) {
-      return 1;
-    }
+    if ( check_error(ray(angle, i), NULL) )
+      goto error_renddis;
     angle -= fovwid;
   }
-  return 0;
+  return SUCCESS;
+  error_renddis:
+  return ERROR_RENDDIS;
 }
 
-int ray( float ang, int ray_num ) {
+STATUS ray( float ang, int ray_num ) {
   const SEGMENT lineB = { { player.pos[0], player.pos[1] },
                         { (cos(ang) * 10 + player.pos[0]), (sin(ang) * 10 + player.pos[1]) },
                         NULL };
@@ -90,10 +94,10 @@ int ray( float ang, int ray_num ) {
     float d2 = y - player.pos[1];
     rays[ray_num].distances[i] = sqrt( d1 * d1 + d2 * d2 );
   }
-  return 0;
+  return SUCCESS;
 }
 
-int min_distance( int NOR ) {
+STATUS min_distance( int NOR ) {
   for (int i = 0; i < NOR; i++) {
     mindist[i] = rays[i].distances[0];
     for (int j = 1; j < world.segment_c; j++) {
@@ -103,5 +107,5 @@ int min_distance( int NOR ) {
       }
     }
   }
-  return 0;
+  return SUCCESS;
 }

@@ -5,12 +5,14 @@ OPT=2
 
 PREFIX_SRC= ./src/
 PREFIX_OBJ= ./obj/
+PREFIX_BIN= ./bin/
 
-SRC= main.c raycast_core.c raylib_window.c
-OBJ= main.o raycast_core.o raylib_window.o
+SRC= main.c raycast_core.c rwindow.c
+OBJ= main.o raycast_core.o rwindow.o
 
 SRC:= $(addprefix $(PREFIX_SRC), $(SRC))
 OBJ:= $(addprefix $(PREFIX_OBJ), $(OBJ))
+BUILD_NAME:= $(addprefix $(PREFIX_BIN), $(BUILD_NAME))
 
 CFLUGS+= -Werror -O$(OPT) -lraylib -lm 
 
