@@ -11,7 +11,14 @@ typedef struct {
 typedef struct {
   float *distances;
   POINT *points;
+  TEXTURE **textures;
 } RAY;
+
+typedef struct {
+  float distance;
+  POINT point;
+  TEXTURE *texture;
+} INTERSECTION;
 
 typedef struct {
   POINT A;

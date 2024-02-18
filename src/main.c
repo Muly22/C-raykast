@@ -27,10 +27,11 @@ int main() {
 
 STATUS main_loop() {
   for (;;) {
-    if ( next_event() ) break;
-    if ( check_error(window_clear(), NULL)) {goto error_main_loop;}
-    renddis(player.angle, player.FOV, SCREEN_WIDTH);
+    if ( next_event() ) {break;}
+    if ( check_error(window_clear(), NULL) ) {goto error_main_loop;}
+    renddis( player.angle, player.FOV, SCREEN_WIDTH );
     min_distance(SCREEN_WIDTH);
+    
   }
   return SUCCESS;
   error_main_loop:

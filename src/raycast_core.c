@@ -8,12 +8,18 @@ static PLAYER player;
 static WORLD world;
 
 RAY *rays;
-float *mindist;
+INTERSECTION *intersection;
 
 STATUS init_mindist( int NOR ) {
-  mindist = calloc( NOR, sizeof(float) );
-  if ( mindist == NULL )
+  intersection = calloc( NOR, sizeof(INTERSECTION) );
+  if ( intersection == NULL )
     goto error_init;
+  for (int i = 0; i < NOR; i++) {
+    intersection[i].distance = NAN;
+    intersection[i].point.x  = NAN;
+    intersection[i].point.y  = NAN;
+    intersection[i].texture  = NULL;
+  }
   #ifdef DEBUG
     puts("INFO: init_mindist");
   #endif
@@ -29,6 +35,7 @@ STATUS init_rays( int NOR ) {
   for (int i = 0; i < NOR; i++) {
     rays[i].distances = calloc( world.segment_c, sizeof(float) );
     rays[i].points    = calloc( world.segment_c, sizeof(POINT) );
+    rays[i].textures  = calloc( world.segment_c, sizeof(TEXTURE*) );
   }
   #ifdef DEBUG
     puts("INFO: init_rays");
@@ -39,8 +46,8 @@ STATUS init_rays( int NOR ) {
 }
 
 STATUS destroy_mindist() {
-  free(mindist);
-  mindist = NULL;
+  free(intersection);
+  intersection = NULL;
   #ifdef DEBUG
     puts("INFO: destroy_mindist");
   #endif
@@ -84,10 +91,7 @@ STATUS ray( float ang, int ray_num ) {
     float n = ( lineA.A.x - lineA.B.x ) * ( lineB.A.y - lineB.B.y )
             - ( lineA.A.y - lineA.B.y ) * ( lineB.A.x - lineB.B.x );
     if ( n == 0.0f ) {
-      rays[ray_num].distances[i] = NAN;
-      rays[ray_num].points[i].x  = NAN;
-      rays[ray_num].points[i].y  = NAN;
-      continue;
+      goto no_intersection;
     }
     n = 1 / n;
     float l1 = lineA.A.x * lineA.B.y - lineA.A.y * lineA.B.x;
@@ -98,25 +102,32 @@ STATUS ray( float ang, int ray_num ) {
     rays[ray_num].points[i].y = y;
     if ( !((((x >= lineA.A.x) && (x <= lineA.B.x)) || ((x <= lineA.A.x) && (x >= lineA.B.x)))
         && (((y >= lineA.A.y) && (y <= lineA.B.y)) || ((y <= lineA.A.y) && (y >= lineA.B.y)))) ) {
-      rays[ray_num].distances[i] = NAN;
-      rays[ray_num].points[i].x  = NAN;
-      rays[ray_num].points[i].y  = NAN;
-      continue;
+      goto no_intersection;
     }
     float d1 = x - player.pos[0];
     float d2 = y - player.pos[1];
     rays[ray_num].distances[i] = sqrt( d1 * d1 + d2 * d2 );
+    continue;
+    
+    no_intersection:
+    rays[ray_num].distances[i] = NAN;
+    rays[ray_num].points[i].x  = NAN;
+    rays[ray_num].points[i].y  = NAN;
+    rays[ray_num].textures[i]  = NULL;
   }
   return SUCCESS;
 }
 
 STATUS min_distance( int NOR ) {
   for (int i = 0; i < NOR; i++) {
-    mindist[i] = rays[i].distances[0];
+    intersection[i].distance = rays[i].distances[0];
     for (int j = 1; j < world.segment_c; j++) {
-      if ( !isnan(rays[i].distances[j]) && !isnan(rays[i].distances[j - 1])
+      if ( !(isnan(rays[i].distances[j]) && isnan(rays[i].distances[j - 1]))
            && (rays[i].distances[j] < rays[i].distances[j - 1]) ) {
-        mindist[i] = rays[i].distances[j];
+        intersection[i].distance = rays[i].distances[j];
+        intersection[i].point.x  = rays[i].points[j].x;
+        intersection[i].point.y  = rays[i].points[j].y;
+        intersection[i].texture  = rays[i].textures[j];
       }
     }
   }

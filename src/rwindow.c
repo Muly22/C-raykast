@@ -14,15 +14,15 @@ XEvent e;
 int s;
 
 STATUS create_window() {
-  if ((d = XOpenDisplay(getenv("DISPLAY"))) == NULL) {
+  if ( (d = XOpenDisplay(getenv("DISPLAY"))) == NULL ) {
     puts("Can't connect X server");
     goto error_open_display;
   }
   s = XDefaultScreen(d);
-  w = XCreateSimpleWindow(d, RootWindow(d, s), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1,
-                           XBlackPixel(d, s), XWhitePixel(d, s));
-  XSelectInput(d, w, ExposureMask | KeyPressMask);
-  XMapWindow(d, w);
+  w = XCreateSimpleWindow( d, RootWindow(d, s), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 1,
+                           XBlackPixel(d, s), XWhitePixel(d, s) );
+  XSelectInput( d, w, ExposureMask | KeyPressMask );
+  XMapWindow( d, w );
   #ifdef DEBUG
     puts("INFO: window create");
   #endif
@@ -32,15 +32,15 @@ STATUS create_window() {
 }
 
 int next_event() {
-  XNextEvent(d, &e);
-  if (e.type == KeyPress)
+  XNextEvent( d, &e );
+  if ( e.type == KeyPress )
     return 1;
   return 0;
 }
 
 STATUS window_clear() {
   if (e.type == Expose) {
-    XFillRectangle(d, w, DefaultGC(d, s), 20, 20, 10, 10);
+    XFillRectangle( d, w, DefaultGC(d, s), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT ); 
     return SUCCESS;
   }
   return ERROR_CLEAR_WINDOW;

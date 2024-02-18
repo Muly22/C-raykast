@@ -6,7 +6,7 @@
 #include "rerror.h"
 
 extern RAY *rays;
-extern float *mindist;
+extern INTERSECTION *intersection;
 
 static PLAYER player;
 static WORLD world;
