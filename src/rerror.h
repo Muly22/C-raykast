@@ -2,6 +2,7 @@
 #define _RERROR_H_
 
 #include <stdio.h>
+#include <string.h>
 
 typedef enum {
   SUCCESS = 0,
@@ -13,6 +14,9 @@ typedef enum {
   ERROR_MAIN_LOOP
 } STATUS;
 
-int check_error( STATUS exit_code, char *error );
+extern STATUS exit_status;
+extern char exit_message[255];
+
+int check_error( STATUS exit_code );
 
 #endif

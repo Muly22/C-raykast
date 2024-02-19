@@ -15,7 +15,7 @@ int s;
 
 STATUS create_window() {
   if ( (d = XOpenDisplay(getenv("DISPLAY"))) == NULL ) {
-    puts("Can't connect X server");
+    strcpy(exit_message, "Can't connect X server");
     goto error_open_display;
   }
   s = XDefaultScreen(d);
@@ -34,7 +34,7 @@ STATUS create_window() {
 int next_event() {
   XNextEvent( d, &e );
   if ( e.type == KeyPress )
-    return 1;
+    return 0;
   return 0;
 }
 
@@ -43,6 +43,7 @@ STATUS window_clear() {
     XFillRectangle( d, w, DefaultGC(d, s), 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT ); 
     return SUCCESS;
   }
+  strcpy(exit_message, "e.type != Expose");
   return ERROR_CLEAR_WINDOW;
 }
 

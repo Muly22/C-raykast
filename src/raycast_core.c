@@ -12,8 +12,10 @@ INTERSECTION *intersection;
 
 STATUS init_mindist( int NOR ) {
   intersection = calloc( NOR, sizeof(INTERSECTION) );
-  if ( intersection == NULL )
+  if ( intersection == NULL ) {
+    strcpy("intersection == NULL", exit_message);
     goto error_init;
+  }
   for (int i = 0; i < NOR; i++) {
     intersection[i].distance = NAN;
     intersection[i].point.x  = NAN;
@@ -30,8 +32,10 @@ STATUS init_mindist( int NOR ) {
 
 STATUS init_rays( int NOR ) {
   rays = calloc( NOR, sizeof(RAY) );
-  if ( rays == NULL )
+  if ( rays == NULL ) {
+    strcpy("rays == NULL", exit_message);
     goto error_init;
+  }
   for (int i = 0; i < NOR; i++) {
     rays[i].distances = calloc( world.segment_c, sizeof(float) );
     rays[i].points    = calloc( world.segment_c, sizeof(POINT) );
@@ -73,8 +77,10 @@ STATUS renddis( float POV, int FOV, int NOR ) {
   float fovwid = POV / NOR;
   float angle = POV + (FOV >> 1);
   for (int i = 0; i < NOR; i++) {
-    if ( check_error(ray(angle, i), NULL) )
+    if ( check_error(ray(angle, i)) ) {
+      strcpy("error_ray", exit_message);
       goto error_renddis;
+    }
     angle -= fovwid;
   }
   return SUCCESS;
@@ -107,6 +113,7 @@ STATUS ray( float ang, int ray_num ) {
     float d1 = x - player.pos[0];
     float d2 = y - player.pos[1];
     rays[ray_num].distances[i] = sqrt( d1 * d1 + d2 * d2 );
+    rays[ray_num].textures[i] = lineA.texture;
     continue;
     
     no_intersection:

@@ -2,6 +2,7 @@
 #define _RWINDOW_H_
 
 #include "rerror.h"
+#include "texture.h"
 
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
