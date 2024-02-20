@@ -34,7 +34,7 @@ STATUS create_window() {
 int next_event() {
   XNextEvent( d, &e );
   if ( e.type == KeyPress )
-    return 0;
+    return 1;
   return 0;
 }
 
@@ -53,6 +53,12 @@ void close_window() {
     puts("INFO: window close");
   #endif
   return;
+}
+
+STATUS draw_ray_line( int H_pix, int pos_x_pix, TEXTURE *texture  ) {
+  XDrawLine( d, w, DefaultGC(d, s), pos_x_pix, H_pix - (SCREEN_HEIGHT >> 2), pos_x_pix, H_pix );
+  
+  return SUCCESS;
 }
 
 #elif _WIN32

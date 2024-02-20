@@ -89,29 +89,30 @@ STATUS renddis( float POV, int FOV, int NOR ) {
 }
 
 STATUS ray( float ang, int ray_num ) {
+  float n, l1, l2, x, y, d1, d2;
+
   const SEGMENT lineB = { { player.pos[0], player.pos[1] },
                         { (cos(ang) * 10 + player.pos[0]), (sin(ang) * 10 + player.pos[1]) },
                         NULL };
   for (int i = 0; i < world.segment_c; i++) {
     const SEGMENT lineA = world.segments[i];
-    float n = ( lineA.A.x - lineA.B.x ) * ( lineB.A.y - lineB.B.y )
+    n = ( lineA.A.x - lineA.B.x ) * ( lineB.A.y - lineB.B.y )
             - ( lineA.A.y - lineA.B.y ) * ( lineB.A.x - lineB.B.x );
-    if ( n == 0.0f ) {
+    if ( n == 0.0f )
       goto no_intersection;
-    }
     n = 1 / n;
-    float l1 = lineA.A.x * lineA.B.y - lineA.A.y * lineA.B.x;
-    float l2 = lineB.A.x * lineB.B.y - lineB.A.y * lineB.B.x;
-    float x = ( l1 * ( lineB.A.x - lineB.B.x ) - ( lineA.A.x - lineA.B.x ) * l2 ) * n;
-    float y = ( l1 * ( lineB.A.y - lineB.B.y ) - ( lineA.A.y - lineA.B.y ) * l2 ) * n;
+    l1 = lineA.A.x * lineA.B.y - lineA.A.y * lineA.B.x;
+    l2 = lineB.A.x * lineB.B.y - lineB.A.y * lineB.B.x;
+    x = ( l1 * ( lineB.A.x - lineB.B.x ) - ( lineA.A.x - lineA.B.x ) * l2 ) * n;
+    y = ( l1 * ( lineB.A.y - lineB.B.y ) - ( lineA.A.y - lineA.B.y ) * l2 ) * n;
     rays[ray_num].points[i].x = x;
     rays[ray_num].points[i].y = y;
     if ( !((((x >= lineA.A.x) && (x <= lineA.B.x)) || ((x <= lineA.A.x) && (x >= lineA.B.x)))
         && (((y >= lineA.A.y) && (y <= lineA.B.y)) || ((y <= lineA.A.y) && (y >= lineA.B.y)))) ) {
       goto no_intersection;
     }
-    float d1 = x - player.pos[0];
-    float d2 = y - player.pos[1];
+    d1 = x - player.pos[0];
+    d2 = y - player.pos[1];
     rays[ray_num].distances[i] = sqrt( d1 * d1 + d2 * d2 );
     rays[ray_num].textures[i] = lineA.texture;
     continue;
