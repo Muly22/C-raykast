@@ -6,8 +6,8 @@
 RAY *rays;
 INTERSECTION *intersection;
 
-static PLAYER player;
-static WORLD world;
+PLAYER player;
+WORLD world;
 
 void init_mindist( int NOR ) {
   intersection = calloc( NOR, sizeof(INTERSECTION) );

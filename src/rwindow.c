@@ -1,7 +1,7 @@
 #include "rwindow.h"
 
-int SCREEN_WIDTH=1920;
-int SCREEN_HEIGHT=1080;
+unsigned int window_width=1920;
+unsigned int window_height=1080;
 
 #include <X11/Xlib.h>
 #include <stdlib.h>

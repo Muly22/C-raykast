@@ -3,8 +3,8 @@
 
 #include "texture.h"
 
-extern int window_width;
-extern int window_height;
+extern unsigned int window_width;
+extern unsigned int window_height;
 
 void create_window(void);
 void close_window(void);

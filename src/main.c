@@ -16,9 +16,7 @@ int main() {
   world.segments[0].B.y = 5;
   world.segments[0].texture = NULL;
 
-  for (;;) {
-    if ( next_event() ) {break;}
-    window_clear();
+  /*for (;;)*/ {
     renddis( player.angle, player.FOV, window_width );
     min_distance(window_width);
     for (int i = 0; i < window_width; i++) {

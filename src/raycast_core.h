@@ -6,6 +6,8 @@
 
 extern RAY *rays;
 extern INTERSECTION *intersection;
+extern PLAYER player;
+extern WORLD world;
 
 void init_rays(int NOR);
 void destroy_rays(int NOR);
