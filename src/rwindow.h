@@ -1,17 +1,14 @@
 #ifndef _RWINDOW_H_
 #define _RWINDOW_H_
 
-#include "rerror.h"
 #include "texture.h"
 
-extern int SCREEN_WIDTH;
-extern int SCREEN_HEIGHT;
+extern int window_width;
+extern int window_height;
 
-STATUS create_window( void );
-int    next_event   ( void );
-STATUS window_clear ( void );
-void   close_window ( void );
+void create_window(void);
+void close_window(void);
 
-STATUS draw_ray_line( int H_pix, int pos_x_pix, TEXTURE *texture  );
+void draw_ray_line(int H_pix, int pos_x_pix, TEXTURE *texture);
 
 #endif

@@ -28,8 +28,8 @@ typedef struct {
 
 typedef struct {
   SEGMENT *segment;
-  bool open;
-  bool unclose;
+  unsigned char open:1;
+  unsigned char unclose:1;
 } DOOR;
 
 #endif

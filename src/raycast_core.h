@@ -3,22 +3,18 @@
 
 #include "player.h"
 #include "world.h"
-#include "rerror.h"
 
 extern RAY *rays;
 extern INTERSECTION *intersection;
 
-static PLAYER player;
-static WORLD world;
+void init_rays(int NOR);
+void destroy_rays(int NOR);
 
-STATUS init_rays   ( int NOR );
-STATUS destroy_rays( int NOR );
+void init_mindist(int NOR);
+void destroy_mindist(void);
 
-STATUS init_mindist( int NOR );
-STATUS destroy_mindist( void );
-
-STATUS renddis( float POV, int FOV, int NOR ); 
-STATUS ray( float ang, int ray_num );
-STATUS min_distance( int NOR );
+void renddis(float POV, int FOV, int NOR); 
+void ray(float ang, RAY *r);
+void min_distance(int NOR);
 
 #endif
