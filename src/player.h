@@ -1,8 +1,10 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 
+#include "object.h"
+
 typedef struct {
-  float pos[3];
+  POINT pos;
   float angle;
   int FOV;
 } PLAYER;
